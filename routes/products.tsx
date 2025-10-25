@@ -1,0 +1,30 @@
+import { Handlers, PageProps } from "$fresh/server.ts";
+import ProductForm from "../islands/ProductForm.tsx";
+
+interface State {
+  session?: {
+    username: string;
+    role: string;
+  };
+}
+
+export const handler: Handlers<unknown, State> = {
+  GET(_req, ctx) {
+    if (!ctx.state.session) {
+      return new Response(null, {
+        status: 302,
+        headers: { Location: "/login" },
+      });
+    }
+    return ctx.render();
+  },
+};
+
+export default function Products(_props: PageProps<unknown, State>) {
+  return (
+    <div>
+      <h1 class="text-3xl font-bold mb-6">Products Management</h1>
+      <ProductForm />
+    </div>
+  );
+}
